@@ -13,12 +13,15 @@ do
 	if [ -e "$possible_backup" ]
 	then
 		echo File found backed up at "$possible_backup" as a "$backup_format"
-		exit 0
+	else
+		false
 	fi
-	exit 1
 done && exit 0
 
-#for opened_handle in /proc/*/fd/*
-#do
-#	readline "$opened_handle"
-#done
+# note: we could start imaging the drive to sia skynet or something, even
+# though it is mounted.
+echo "Scanning for processes with open handles on $device ..."
+for opened_handle in /proc/*/fd/*
+do
+	echo -n "$opened_handle "; readlink "$opened_handle"
+done | grep -F "$mountpoint"

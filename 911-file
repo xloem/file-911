@@ -1,6 +1,0 @@
-#!/usr/bin/env -S sudo bash
-file="$1"
-dir="$(dirname "$file")"
-device="$(df --output=source "$dir" | grep '/')"
-mountpoint="$(df --output=target "$dir" } grep '/')"
-
