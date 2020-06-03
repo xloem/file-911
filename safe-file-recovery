@@ -1,6 +1,24 @@
 #!/usr/bin/env -S sudo bash
 file="$1"
+file_basename="$(basename "$file")"
+file_dirname="$(dirname "$file")"
 dir="$(dirname "$file")"
 device="$(df --output=source "$dir" | grep '/')"
-mountpoint="$(df --output=target "$dir" } grep '/')"
+mountpoint="$(df --output=target "$dir" | grep '/')"
 
+possible_backups="$file_dirname"/."$file_basename".s??
+backup_format='vim swapfile'
+for possible_backup in $possible_backups
+do
+	if [ -e "$possible_backup" ]
+	then
+		echo File found backed up at "$possible_backup" as a "$backup_format"
+		exit 0
+	fi
+	exit 1
+done && exit 0
+
+#for opened_handle in /proc/*/fd/*
+#do
+#	readline "$opened_handle"
+#done
